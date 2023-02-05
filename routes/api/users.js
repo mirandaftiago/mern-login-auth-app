@@ -27,6 +27,7 @@ router.post('/register', (req, res) => {
         return res.status(400).json(errors);
     };
     
+    // find user by email
     User.findOne({
         email: req.body.email
     }).then( user => {
@@ -53,6 +54,58 @@ router.post('/register', (req, res) => {
                 });
             });
         }
+    });
+});
+
+// POST api/users/login
+// user login and return JWT token
+router.post('/login', (req, res) => {
+    // form validation
+    const { errors, isValid } = validateLoginInput(req.body);
+
+    // check validation
+    if (!isValid) {
+        return res.status(400).json(errors);
+    };
+
+    const email = req.body.email;
+    const password = req.body.password;
+    
+    // find user by email
+    User.findOne({ email }).then(user => {
+        // check if user exists
+        if (!user) {
+            return res.status(404).json({ emailnotfound: 'Email not found' });
+        }
+        // check password
+        bcrypt.compare(password, user.password).then(isMatch => {
+            if (isMatch) {
+                // User matches
+                // Create JWT Payload
+                const payload = {
+                    id: user.id,
+                    name: user.name
+                };
+                // Sign token
+                jwt.sign(
+                    payload,
+                    process.env.SECRETKEY,
+                    {
+                        expiresIn: 31556926 // 1 year in seconds
+                    },
+                    (err, token) => {
+                        res.json({
+                            success: true,
+                            token: 'Bearer ' + token
+                        });
+                    }
+                );
+            } else {
+                return res
+                    .status(400)
+                    .json({ passwordincorrect: 'Password incorrect' });
+            }
+        });
     });
 });
 
