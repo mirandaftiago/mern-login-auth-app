@@ -54,7 +54,7 @@ class App extends Component {
                 <Route exact path='/login' element={<Login />} />
             </Routes>
             <Routes>
-              <Route exact path='/dashboard' component={Dashboard} />
+              <Route path='/dashboard' element={Dashboard} />
             </Routes>
           </div>
         </Router>
