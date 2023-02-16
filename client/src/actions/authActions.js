@@ -12,12 +12,16 @@ export const registerUser = (userData, history) => dispatch => {
   axios
     .post('/api/users/register', userData)
     .then(res => history.push('/login')) // re-direct to login on successful register
-    .catch(err =>
-      dispatch({
-        type: GET_ERRORS,
-        payload: err.response.data
-      })
-    );
+    .catch(err => {
+      if (err.response) {
+        dispatch({
+          type: GET_ERRORS,
+          payload: err.response.data
+        });
+      } else {
+        console.error(err);
+      }
+    });
 };
 
 // Login - get user token
@@ -36,12 +40,16 @@ export const loginUser = userData => dispatch => {
       // Set current user
       dispatch(setCurrentUser(decoded));
     })
-    .catch(err =>
-      dispatch({
-        type: GET_ERRORS,
-        payload: err.response.data
-      })
-    );
+    .catch(err => {
+      if (err.response) {
+        dispatch({
+          type: GET_ERRORS,
+          payload: err.response.data
+        });
+      } else {
+        console.error(err);
+      }
+    });
 };
 
 // Set logged in user
@@ -66,4 +74,4 @@ export const logoutUser = () => dispatch => {
   setAuthToken(false);
   // Set current user to empty object {} which will set isAuthenticated to false
   dispatch(setCurrentUser({}));
-};
+}; 
