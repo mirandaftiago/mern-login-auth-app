@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import jwt_decode from 'jwt-decode';
 import setAuthToken from './utils/setAuthToken';
@@ -41,26 +41,41 @@ if(localStorage.jwtToken) {
   }
 }
 
-class App extends Component {
-  render() {
-    return (
-      <Provider store={store}>
-        <Router>
-          <div className='App'>
-            <Navbar />
-            <Routes>
-                <Route exact path='/' element={<Landing />} />
-                <Route exact path='/register' element={<Register />} />
-                <Route exact path='/login' element={<Login />} />
-            </Routes>
-            <Routes>
-              <Route path='/dashboard' element={Dashboard} />
-            </Routes>
-          </div>
-        </Router>
-      </Provider>
-    );
-  }
+function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const handleLogin = () => {
+    // perform login operation
+    setIsLoggedIn(true);
+  };
+
+  const handleLogout = () => {
+    // perform logout operation
+    setIsLoggedIn(false);
+  };
+
+  return (
+    <Provider store={store}>
+        <div className='App'>
+          <Navbar />
+          <Routes>
+              <Route exact path='/' element={<Landing />} />
+              <Route exact path='/register' element={<Register />} />
+              <Route exact path='/login' element={<Login />} />
+              <Route
+                path="/dashboard"
+                element={
+                  <PrivateRoute
+                    component={Dashboard}
+                    onLogout={handleLogout}
+                    isAuthenticated={isLoggedIn}
+                  />
+                }
+              />
+          </Routes>
+        </div>
+    </Provider>
+  );
 }
 
 export default App;
