@@ -35,7 +35,7 @@ const Login = (props) => {
             password: state.password,
             confirmPassword: state.confirmPassword
         };
-        props.registerUser(newUser, props.history);
+        props.loginUser(newUser, props.history);
     };
 
     const { errors } = state;

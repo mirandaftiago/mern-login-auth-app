@@ -28,11 +28,13 @@ export const registerUser = (userData, navigate) => (dispatch) => {
 
 // Login - get user token
 export const loginUser = userData => dispatch => {
+
+  const navigate = useNavigate(); // import useHistory hook and use it to get the history object
   axios
     .post('/api/users/login', userData)
     .then(res => {
       // Save to localStorage
-// Set token to localStorage
+      // Set token to localStorage
       const { token } = res.data;
       localStorage.setItem('jwtToken', token);
       // Set token to Auth header
@@ -41,6 +43,7 @@ export const loginUser = userData => dispatch => {
       const decoded = jwt_decode(token);
       // Set current user
       dispatch(setCurrentUser(decoded));
+      navigate('/dashboard');
     })
     .catch(err => {
       if (err.response) {
