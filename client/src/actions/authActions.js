@@ -1,4 +1,6 @@
+import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import setAuthToken from '../utils/setAuthToken';
 import jwt_decode from 'jwt-decode';
 import {
@@ -8,10 +10,10 @@ import {
 } from './types';
 
 // Register User
-export const registerUser = (userData, history) => dispatch => {
+export const registerUser = (userData, navigate) => (dispatch) => {
   axios
     .post('/api/users/register', userData)
-    .then(res => history.push('/login')) // re-direct to login on successful register
+    .then(res => navigate('/login')) // re-direct to login on successful register
     .catch(err => {
       if (err.response) {
         dispatch({
@@ -59,6 +61,7 @@ export const setCurrentUser = decoded => {
     payload: decoded
   };
 };
+
 // User loading
 export const setUserLoading = () => {
   return {
@@ -75,3 +78,5 @@ export const logoutUser = () => dispatch => {
   // Set current user to empty object {} which will set isAuthenticated to false
   dispatch(setCurrentUser({}));
 }; 
+
+export default registerUser;

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { registerUser } from '../../actions/authActions';
+import { connect, useDispatch } from 'react-redux';
+import { loginUser, logoutUser, registerUser } from '../../actions/authActions';
 import classNames from 'classnames';
 import { withRouter } from '../../utils/withRouter';
 
@@ -14,6 +14,20 @@ const Register = (props) => {
         confirmPassword: '',
         errors: {}
     });
+
+    const dispatch = useDispatch();
+
+    const handleRegister = (userData) => {
+      dispatch(registerUser(userData, navigate));
+    };
+  
+    const handleLogin = (userData) => {
+      dispatch(loginUser(userData));
+    };
+  
+    const handleLogout = () => {
+      dispatch(logoutUser());
+    };
 
     const navigate = useNavigate();
 
@@ -37,6 +51,7 @@ const Register = (props) => {
             password: state.password,
             confirmPassword: state.confirmPassword
         };
+        console.log(props.history);
         props.registerUser(newUser, props.history);
     };
 
