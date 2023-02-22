@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import setAuthToken from '../utils/setAuthToken';
 import jwt_decode from 'jwt-decode';
 import {
@@ -8,10 +9,10 @@ import {
 } from './types';
 
 // Register User
-export const registerUser = (userData, history) => dispatch => {
+export const registerUser = (userData, navigate) => (dispatch) => {
   axios
     .post('/api/users/register', userData)
-    .then(res => history.push('/login')) // re-direct to login on successful register
+    .then(res => navigate('/login')) // re-direct to login on successful register
     .catch(err => {
       if (err.response) {
         dispatch({
@@ -25,12 +26,12 @@ export const registerUser = (userData, history) => dispatch => {
 };
 
 // Login - get user token
-export const loginUser = userData => dispatch => {
+export const loginUser = (userData, navigate) => (dispatch) => {
   axios
     .post('/api/users/login', userData)
     .then(res => {
       // Save to localStorage
-// Set token to localStorage
+      // Set token to localStorage
       const { token } = res.data;
       localStorage.setItem('jwtToken', token);
       // Set token to Auth header
@@ -39,6 +40,7 @@ export const loginUser = userData => dispatch => {
       const decoded = jwt_decode(token);
       // Set current user
       dispatch(setCurrentUser(decoded));
+      navigate('/dashboard');
     })
     .catch(err => {
       if (err.response) {
@@ -50,6 +52,8 @@ export const loginUser = userData => dispatch => {
         console.error(err);
       }
     });
+  const navigate = useNavigate(); // import useHistory hook and use it to get the history object
+
 };
 
 // Set logged in user
@@ -59,6 +63,7 @@ export const setCurrentUser = decoded => {
     payload: decoded
   };
 };
+
 // User loading
 export const setUserLoading = () => {
   return {
@@ -75,3 +80,6 @@ export const logoutUser = () => dispatch => {
   // Set current user to empty object {} which will set isAuthenticated to false
   dispatch(setCurrentUser({}));
 }; 
+
+
+export default registerUser;
