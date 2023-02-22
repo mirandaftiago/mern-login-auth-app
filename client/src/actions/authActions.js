@@ -27,9 +27,7 @@ export const registerUser = (userData, navigate) => (dispatch) => {
 };
 
 // Login - get user token
-export const loginUser = userData => dispatch => {
-
-  const navigate = useNavigate(); // import useHistory hook and use it to get the history object
+export const loginUser = (userData, navigate) => (dispatch) => {
   axios
     .post('/api/users/login', userData)
     .then(res => {
@@ -55,6 +53,8 @@ export const loginUser = userData => dispatch => {
         console.error(err);
       }
     });
+  const navigate = useNavigate(); // import useHistory hook and use it to get the history object
+
 };
 
 // Set logged in user
