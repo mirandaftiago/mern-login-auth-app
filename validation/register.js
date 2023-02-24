@@ -7,7 +7,7 @@ module.exports = function validateRegisterInput(data){
     
     Validator.isEmpty(name) && (errors.name = 'Name field is required');
     Validator.isEmpty(email) && (errors.email = 'Email field is required');
-    !Validator.isEmail(email) && (errors.mail = 'Email is invalid');
+    !Validator.isEmail(email) && (errors.email = 'Email is invalid');
     Validator.isEmpty(password) && (errors.password = 'Password field is required');
     !Validator.isLength(password, { min: 6, max: 30 }) && (errors.password = 'Password must be at least 6 characters');
     !Validator.equals(password, confirmPassword) && (errors.confirmPassword = 'Password must match');

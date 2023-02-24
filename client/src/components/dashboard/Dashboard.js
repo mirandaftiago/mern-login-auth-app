@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 import { logoutUser } from '../../actions/authActions';
 
@@ -47,9 +46,5 @@ function Dashboard() {
         </div>
     );
 }
-
-Dashboard.propTypes = {
-    logoutUser: PropTypes.func.isRequired
-};
 
 export default Dashboard;
