@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import { connect, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { loginUser, logoutUser, registerUser } from '../../actions/authActions';
 import classNames from 'classnames';
 import { withRouter } from '../../utils/withRouter';
 
 const Register = (props) => {
+    const auth = useSelector(state => state.auth);
+    const errors = useSelector(state => state.errors);
+
     const [state, setState] = useState({
         name: '',
         email: '',
@@ -33,10 +35,10 @@ const Register = (props) => {
 
     useEffect(() => {
         // If logged in and user navigates to Register page, should redirect them to dashboard
-        if (props.auth.isAuthenticated) {
+        if (auth.isAuthenticated) {
             navigate('/dashboard');
         }
-    }, [props.auth.isAuthenticated, navigate]);
+    }, [auth.isAuthenticated, navigate]);
 
     const onChange = e => {
         setState({ ...state, [e.target.id]: e.target.value });
@@ -51,11 +53,8 @@ const Register = (props) => {
             password: state.password,
             confirmPassword: state.confirmPassword
         };
-        console.log(props.history);
-        props.registerUser(newUser, props.history);
+        dispatch(registerUser(newUser, props.history));
     };
-
-    const { errors } = state;
 
     return (
         <div className='container'>
@@ -151,18 +150,4 @@ const Register = (props) => {
     );
 };
 
-Register.propTypes = {
-    registerUser: PropTypes.func.isRequired,
-    auth: PropTypes.object.isRequired,
-    errors: PropTypes.object.isRequired
-};
-
-const mapStateToProps = state => ({
-    auth: state.auth,
-    errors: state.errors
-});
-
-export default connect(
-    mapStateToProps,
-    { registerUser}
-)(withRouter(Register));
+export default withRouter(Register);

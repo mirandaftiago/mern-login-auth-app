@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { logoutUser } from '../../actions/authActions';
@@ -6,15 +7,18 @@ import { logoutUser } from '../../actions/authActions';
 
 function Dashboard(props) {
     const { user } = props.auth;
+    
+    // Get the navigate function from useNavigate hook
+    const navigate = useNavigate();
   
     useEffect(() => {
       return () => {
-        props.logoutUser();
+        props.logoutUser(navigate);
       };
     }, []);
   
     const handleLogout = () => {
-      props.logoutUser();
+      props.logoutUser(navigate);
     };
 
     return (
@@ -25,7 +29,7 @@ function Dashboard(props) {
                     <b>Hey there, </b> {user.name.split(' ')[0]}
                     <p className='flow-text grey-text text-darken-1'>
                         You are logged into a full-stack{' '}
-                        <span style={{ fontFamily: 'monospace' }}>MERN</span> app 1👏
+                        <span style={{ fontFamily: 'monospace' }}>MERN</span> app👏
                     </p>
                     </h4>
                     <button
