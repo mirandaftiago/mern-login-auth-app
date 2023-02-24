@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import jwt_decode from 'jwt-decode';
 import setAuthToken from './utils/setAuthToken';
@@ -41,41 +41,54 @@ if(localStorage.jwtToken) {
   }
 }
 
-function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+function App({ auth, onLogout }) {
 
-  const handleLogin = () => {
-    // perform login operation
-    setIsLoggedIn(true);
-  };
+  const isAuthenticated = auth;
 
-  const handleLogout = () => {
-    // perform logout operation
-    setIsLoggedIn(false);
-  };
+  useEffect(() => {
+      // Check for token in order to keep the user logged in
+      if(localStorage.jwtToken) {
+        // Set auth token header auth
+        const token = localStorage.jwtToken;
+        setAuthToken(token);
+  
+        // Decode token and get user info
+        const decoded = jwt_decode(token);
+  
+        // Set user and isAuthenticated
+        store.dispatch(setCurrentUser(decoded));
+  
+        // Check for expired token
+        // Date in millisecconds
+        const currentTime = Date.now() / 1000; 
+    
+        if(decoded.exp < currentTime) {
+          // Logout user
+          store.dispatch(logoutUser());
+  
+          // Redirect to login
+          window.location.href = './login';
+        }
+      }
+    }, []);
 
-  return (
-    <Provider store={store}>
-        <div className='App'>
-          <Navbar />
-          <Routes>
-              <Route exact path='/' element={<Landing />} />
-              <Route exact path='/register' element={<Register />} />
-              <Route exact path='/login' element={<Login />} />
-              <Route
-                path="/dashboard/*"
-                element={
-                  <PrivateRoute
-                    component={Dashboard}
-                    onLogout={handleLogout}
-                    isAuthenticated={isLoggedIn}
-                  />
-                }
-              />
-          </Routes>
-        </div>
-    </Provider>
-  );
+    return (
+      <Provider store={store}>
+          <div className='App'>
+            <Navbar />
+            <Routes>
+                <Route exact path='/' element={<Landing />} />
+                <Route exact path='/register' element={<Register />} />
+                <Route exact path='/login' element={<Login />} />
+                <Route
+                  path="/dashboard"
+                  element={<Dashboard onLogout={onLogout} />}
+                  isAuthenticated={isAuthenticated}
+                />
+            </Routes>
+          </div>
+      </Provider>
+    );
 }
 
 export default App;

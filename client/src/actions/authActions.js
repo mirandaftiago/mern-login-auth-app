@@ -8,6 +8,7 @@ import {
   USER_LOADING
 } from './types';
 
+
 // Register User
 export const registerUser = (userData, navigate) => (dispatch) => {
   axios
@@ -52,12 +53,11 @@ export const loginUser = (userData, navigate) => (dispatch) => {
         console.error(err);
       }
     });
-  const navigate = useNavigate(); // import useHistory hook and use it to get the history object
-
 };
 
 // Set logged in user
 export const setCurrentUser = decoded => {
+  console.log('Setting current user:', decoded);
   return {
     type: SET_CURRENT_USER,
     payload: decoded
@@ -72,14 +72,17 @@ export const setUserLoading = () => {
 };
 
 // Log user out
-export const logoutUser = () => dispatch => {
+export const logoutUser = (navigate) => (dispatch) => {
+  console.log('Logging out user...');
   // Remove token from local storage
   localStorage.removeItem('jwtToken');
   // Remove auth header for future requests
   setAuthToken(false);
   // Set current user to empty object {} which will set isAuthenticated to false
   dispatch(setCurrentUser({}));
-}; 
-
+  console.log('User logged out successfully.');
+  // Redirect user to login page
+  navigate('/');
+};
 
 export default registerUser;

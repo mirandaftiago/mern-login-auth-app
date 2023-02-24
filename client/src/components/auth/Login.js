@@ -1,26 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../../actions/authActions';
 import classnames from 'classnames';
 import { withRouter } from '../../utils/withRouter';
 
 const Login = (props) => {
+    const auth = useSelector(state => state.auth);
+    const errors = useSelector(state => state.errors);
+
     const [state, setState] = useState({
         email: '',
         password: '',
         errors: {}
     });
 
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     useEffect(() => {
         // If logged in and user navigates to Register page, should redirect them to dashboard
-        if (props.auth.isAuthenticated) {
+        if (auth.isAuthenticated) {
             navigate('/dashboard');
         }
-    }, [props.auth.isAuthenticated, navigate]);
+    }, [auth.isAuthenticated, navigate]);
 
     const onChange = e => {
         setState({ ...state, [e.target.id]: e.target.value });
@@ -35,10 +38,8 @@ const Login = (props) => {
             password: state.password,
             confirmPassword: state.confirmPassword
         };
-        props.loginUser(newUser, props.history);
+        dispatch(loginUser(newUser, props.history));
     };
-
-    const { errors } = state;
 
     return(
         <div className='container'>
@@ -113,18 +114,4 @@ const Login = (props) => {
 
 };
 
-Login.propTypes = {
-    loginUser: PropTypes.func.isRequired,
-    auth: PropTypes.object.isRequired,
-    errors: PropTypes.object.isRequired
-};
-
-const mapStateToProps = state => ({
-    auth: state.auth,
-    errors: state.errors
-});
-
-export default connect(
-    mapStateToProps,
-    { loginUser }
-)(withRouter (Login));
+export default withRouter(Login);
