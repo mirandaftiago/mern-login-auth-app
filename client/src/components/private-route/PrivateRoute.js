@@ -1,6 +1,5 @@
 import React from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
-import PropTypes from 'prop-types';
+import { Route, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 function PrivateRoute({ element: Element, ...rest }) {
@@ -13,9 +12,5 @@ function PrivateRoute({ element: Element, ...rest }) {
     navigate('/', { replace: true})
   );
 }
-
-PrivateRoute.propTypes = {
-  element: PropTypes.elementType.isRequired,
-};
 
 export default PrivateRoute;

@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 import setAuthToken from '../utils/setAuthToken';
 import jwt_decode from 'jwt-decode';
 import {
@@ -57,7 +56,6 @@ export const loginUser = (userData, navigate) => (dispatch) => {
 
 // Set logged in user
 export const setCurrentUser = decoded => {
-  console.log('Setting current user:', decoded);
   return {
     type: SET_CURRENT_USER,
     payload: decoded
@@ -73,14 +71,12 @@ export const setUserLoading = () => {
 
 // Log user out
 export const logoutUser = (navigate) => (dispatch) => {
-  console.log('Logging out user...');
   // Remove token from local storage
   localStorage.removeItem('jwtToken');
   // Remove auth header for future requests
   setAuthToken(false);
   // Set current user to empty object {} which will set isAuthenticated to false
   dispatch(setCurrentUser({}));
-  console.log('User logged out successfully.');
   // Redirect user to login page
   navigate('/');
 };
