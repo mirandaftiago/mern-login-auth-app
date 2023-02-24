@@ -1,24 +1,22 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { logoutUser } from '../../actions/authActions';
 
-
-function Dashboard(props) {
-    const { user } = props.auth;
-    
-    // Get the navigate function from useNavigate hook
+function Dashboard() {
+    const { user } = useSelector(state => state.auth);
+    const dispatch = useDispatch();
     const navigate = useNavigate();
   
     useEffect(() => {
-      return () => {
-        props.logoutUser(navigate);
-      };
-    }, []);
-  
+        return () => {
+            dispatch(logoutUser(navigate));
+        };
+    }, [dispatch, navigate]);
+
     const handleLogout = () => {
-      props.logoutUser(navigate);
+        dispatch(logoutUser(navigate));
     };
 
     return (
@@ -51,15 +49,7 @@ function Dashboard(props) {
 }
 
 Dashboard.propTypes = {
-    logoutUser: PropTypes.func.isRequired,
-    auth: PropTypes.object.isRequired
+    logoutUser: PropTypes.func.isRequired
 };
 
-const mapStateToProps = state => ({
-    auth: state.auth
-});
-
-export default connect(
-    mapStateToProps,
-    { logoutUser }
-)(Dashboard);
+export default Dashboard;
