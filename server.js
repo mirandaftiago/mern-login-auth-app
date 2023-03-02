@@ -35,6 +35,10 @@ require('./config/passport')(passport);
 // routes middleware
 app.use('/api/users', users);
 
+app.use('/', (req, res) => {
+    res.send('Hello World');
+});
+
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => console.log(`Server up and running on port ${PORT}!`));
