@@ -11,7 +11,7 @@ import {
 // Register User
 export const registerUser = (userData, navigate) => (dispatch) => {
   axios
-    .post('/api/users/register', userData)
+    .post(`${process.env.REACT_APP_BACKEND_URL}/api/users/register`, userData)
     .then(res => navigate('/login')) // re-direct to login on successful register
     .catch(err => {
       if (err.response) {
@@ -28,7 +28,7 @@ export const registerUser = (userData, navigate) => (dispatch) => {
 // Login - get user token
 export const loginUser = (userData, navigate) => (dispatch) => {
   axios
-    .post('/api/users/login', userData)
+    .post(`${process.env.REACT_APP_BACKEND_URL}/api/users/login`, userData)
     .then(res => {
       // Save to localStorage
       // Set token to localStorage
