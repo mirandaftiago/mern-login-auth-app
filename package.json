@@ -1,0 +1,36 @@
+{
+    "name": "MERN login-auth app",
+    "version": "1.0.0",
+    "description": "some description",
+    "main": "./server/server.js",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1",
+      "start": "cd ./client/src && npm start"
+    },
+    "engines": {
+      "node": "16.x"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@reduxjs/toolkit": "^1.9.2",
+        "@testing-library/jest-dom": "^5.16.5",
+        "@testing-library/react": "^13.4.0",
+        "@testing-library/user-event": "^13.5.0",
+        "axios": "^1.3.2",
+        "classnames": "^2.3.2",
+        "is-empty": "^1.2.0",
+        "jwt-decode": "^3.1.2",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "react-redux": "^8.0.5",
+        "react-router": "^6.8.1",
+        "react-router-dom": "^6.8.1",
+        "react-scripts": "^5.0.1",
+        "redux": "^4.2.1",
+        "redux-devtools-extension": "^2.13.9",
+        "redux-thunk": "^2.4.2",
+        "web-vitals": "^2.1.4"
+    }
+  }
